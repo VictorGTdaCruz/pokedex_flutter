@@ -7,12 +7,14 @@ class PokemonType {
   @override
   String toString() => "{name: $name, id: $id}";
 
-  factory PokemonType.fromJson(Map<String, dynamic> json) {
+  static List<PokemonType> fromJson(Map<String, dynamic> json) {
     try {
       final pokemonTypeResponse = json['results'];
-      final url = pokemonTypeResponse['url'].toString();
-      final id = int.parse(url.substring(url.indexOf("type/") + 5, url.length - 1));
-      return PokemonType(pokemonTypeResponse['name'].toString(), id);
+      return pokemonTypeResponse.map<PokemonType>((element) => {
+        final url = element['url'].toString();
+        final id = int.parse(url.substring(url.indexOf("type/") + 5, url.length - 1));
+        PokemonType(element['name'].toString(), id);
+      });
     } catch (ex) {
       throw Exception(ex);
     }
