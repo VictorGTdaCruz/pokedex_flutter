@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:pokedex_flutter/features/pokedex/pokemon_type_enum.dart';
+import 'package:pokedex_flutter/features/pokedex/repositories/pokedex_repository.dart';
+import 'package:provider/provider.dart';
+
+import 'features/pokedex/bloc/pokedex_cubit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,39 +36,74 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    return Provider<PokedexCubit>(
+        create: (context) => PokedexCubit(PokedexRepository()),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+          ),
+          body: BlocBuilder<PokedexCubit, PokemonTypeState>(
+            builder: (context, state) {
+              if (state is LoadingState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (state is ErrorState) {
+                return Center(
+                  child: TextButton(
+                    child: const Text('Error'),
+                    onPressed: () =>
+                        BlocProvider.of<PokedexCubit>(context).getPokemonTypes(),
+                  ),
+                );
+              }
+
+              if (state is SuccessState) {
+                return GridView.count(
+                  shrinkWrap: true,
+                  childAspectRatio: 3,
+                  crossAxisCount: 2,
+                  children: [
+                    ...state.types.expand((element) => [
+                      Container(
+                          margin: const EdgeInsets.all(4),
+                          child: ElevatedButton(
+                            onPressed: () => print(element.name),
+                            style: ElevatedButton.styleFrom(primary: pokemonTypeEnumFrom(element.id).backgroundColor),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  pokemonTypeEnumFrom(element.id).icon,
+                                  width: 30,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(width: 15),
+                                Text(element.name),
+                              ],
+                            ),
+                          )
+                      )
+                    ])
+                  ],
+                );
+              }
+
+              return Center(
+                child: TextButton(
+                  child: const Text('Empty'),
+                  onPressed: () =>
+                      BlocProvider.of<PokedexCubit>(context).getPokemonTypes(),
+                ),
+              );
+            },
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

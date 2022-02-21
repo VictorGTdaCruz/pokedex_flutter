@@ -57,88 +57,88 @@ extension PokemonTypeEnumExtension on PokemonTypeEnum {
   Color get color {
     switch (this) {
       case PokemonTypeEnum.normal:
-        return PokedexColors.Normal;
+        return PokedexColors.normal;
       case PokemonTypeEnum.fighting:
-        return PokedexColors.Fighting;
+        return PokedexColors.fighting;
       case PokemonTypeEnum.flying:
-        return PokedexColors.Flying;
+        return PokedexColors.flying;
       case PokemonTypeEnum.poison:
-        return PokedexColors.Poison;
+        return PokedexColors.poison;
       case PokemonTypeEnum.ground:
-        return PokedexColors.Ground;
+        return PokedexColors.ground;
       case PokemonTypeEnum.rock:
-        return PokedexColors.Rock;
+        return PokedexColors.rock;
       case PokemonTypeEnum.bug:
-        return PokedexColors.Bug;
+        return PokedexColors.bug;
       case PokemonTypeEnum.ghost:
-        return PokedexColors.Ghost;
+        return PokedexColors.ghost;
       case PokemonTypeEnum.steel:
-        return PokedexColors.Steel;
+        return PokedexColors.steel;
       case PokemonTypeEnum.fire:
-        return PokedexColors.Fire;
+        return PokedexColors.fire;
       case PokemonTypeEnum.water:
-        return PokedexColors.Water;
+        return PokedexColors.water;
       case PokemonTypeEnum.grass:
-        return PokedexColors.Grass;
+        return PokedexColors.grass;
       case PokemonTypeEnum.electric:
-        return PokedexColors.Electric;
+        return PokedexColors.electric;
       case PokemonTypeEnum.psychic:
-        return PokedexColors.Psychic;
+        return PokedexColors.psychic;
       case PokemonTypeEnum.ice:
-        return PokedexColors.Ice;
+        return PokedexColors.ice;
       case PokemonTypeEnum.dragon:
-        return PokedexColors.Dragon;
+        return PokedexColors.dragon;
       case PokemonTypeEnum.dark:
-        return PokedexColors.Dark;
+        return PokedexColors.dark;
       case PokemonTypeEnum.fairy:
-        return PokedexColors.Fairy;
+        return PokedexColors.fairy;
       case PokemonTypeEnum.shadow:
       case PokemonTypeEnum.unknown:
-        return PokedexColors.Unknown;
+        return PokedexColors.unknown;
     }
   }
 
   Color get backgroundColor {
     switch (this) {
       case PokemonTypeEnum.normal:
-        return PokedexColors.NormalBackground;
+        return PokedexColors.normalBackground;
       case PokemonTypeEnum.fighting:
-        return PokedexColors.FightingBackground;
+        return PokedexColors.fightingBackground;
       case PokemonTypeEnum.flying:
-        return PokedexColors.FlyingBackground;
+        return PokedexColors.flyingBackground;
       case PokemonTypeEnum.poison:
-        return PokedexColors.PoisonBackground;
+        return PokedexColors.poisonBackground;
       case PokemonTypeEnum.ground:
-        return PokedexColors.GroundBackground;
+        return PokedexColors.groundBackground;
       case PokemonTypeEnum.rock:
-        return PokedexColors.RockBackground;
+        return PokedexColors.rockBackground;
       case PokemonTypeEnum.bug:
-        return PokedexColors.BugBackground;
+        return PokedexColors.bugBackground;
       case PokemonTypeEnum.ghost:
-        return PokedexColors.GhostBackground;
+        return PokedexColors.ghostBackground;
       case PokemonTypeEnum.steel:
-        return PokedexColors.SteelBackground;
+        return PokedexColors.steelBackground;
       case PokemonTypeEnum.fire:
-        return PokedexColors.FireBackground;
+        return PokedexColors.fireBackground;
       case PokemonTypeEnum.water:
-        return PokedexColors.WaterBackground;
+        return PokedexColors.waterBackground;
       case PokemonTypeEnum.grass:
-        return PokedexColors.GrassBackground;
+        return PokedexColors.grassBackground;
       case PokemonTypeEnum.electric:
-        return PokedexColors.ElectricBackground;
+        return PokedexColors.electricBackground;
       case PokemonTypeEnum.psychic:
-        return PokedexColors.PsychicBackground;
+        return PokedexColors.psychicBackground;
       case PokemonTypeEnum.ice:
-        return PokedexColors.IceBackground;
+        return PokedexColors.iceBackground;
       case PokemonTypeEnum.dragon:
-        return PokedexColors.DragonBackground;
+        return PokedexColors.dragonBackground;
       case PokemonTypeEnum.dark:
-        return PokedexColors.DarkBackground;
+        return PokedexColors.darkBackground;
       case PokemonTypeEnum.fairy:
-        return PokedexColors.FairyBackground;
+        return PokedexColors.fairyBackground;
       case PokemonTypeEnum.shadow:
       case PokemonTypeEnum.unknown:
-        return PokedexColors.Unknown;
+        return PokedexColors.unknown;
     }
   }
 
