@@ -1,11 +1,11 @@
 class PokemonType {
-  final String name;
   final int id;
+  final String name;
 
-  PokemonType(this.name, this.id);
+  PokemonType(this.id, this.name);
 
   @override
-  String toString() => '{name: $name, id: $id}';
+  String toString() => '{name: $id, id: $name}';
 
   static List<PokemonType> fromJson(Map<String, dynamic> json) {
     try {
@@ -13,7 +13,7 @@ class PokemonType {
       return pokemonTypeResponse.map<PokemonType>((element) {
           final url = element['url'].toString();
           final id = int.parse(url.substring(url.indexOf('type/') + 5, url.length - 1));
-          return PokemonType(element['name'].toString(), id);
+          return PokemonType(id, element['name'].toString());
       }).toList();
     } catch (ex) {
       throw Exception(ex);
