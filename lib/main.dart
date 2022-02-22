@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pokedex_flutter/arch/podekex_cubit.dart';
+import 'package:pokedex_flutter/features/pokedex/bloc/pokemon_type_cubit.dart';
 import 'package:pokedex_flutter/features/pokedex/pokemon_type_enum.dart';
-import 'package:pokedex_flutter/features/pokedex/repositories/pokedex_repository.dart';
+import 'package:pokedex_flutter/features/pokedex/repositories/pokemon_type_repository.dart';
+import 'package:pokedex_flutter/features/ui/widgets/pokedex_empty.dart';
+import 'package:pokedex_flutter/features/ui/widgets/pokedex_error.dart';
+import 'package:pokedex_flutter/features/ui/widgets/pokedex_loading.dart';
 import 'package:provider/provider.dart';
-
-import 'features/pokedex/bloc/pokedex_cubit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,37 +42,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<PokedexCubit>(
-        create: (context) => PokedexCubit(PokedexRepository()),
+    return Provider<PokemonTypeCubit>(
+        create: (context) => PokemonTypeCubit(PokemonTypeRepository()),
         child: Scaffold(
           appBar: AppBar(
             title: Text(widget.title),
           ),
-          body: BlocBuilder<PokedexCubit, PokemonTypeState>(
+          body: BlocBuilder<PokemonTypeCubit, PokedexState>(
             builder: (context, state) {
               if (state is LoadingState) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const PokedexLoading();
               }
 
               if (state is ErrorState) {
-                return Center(
-                  child: TextButton(
-                    child: const Text('Error'),
-                    onPressed: () =>
-                        BlocProvider.of<PokedexCubit>(context).getPokemonTypes(),
-                  ),
-                );
+                return PokedexError(() => BlocProvider.of<PokemonTypeCubit>(context).getPokemonTypes());
               }
 
               if (state is SuccessState) {
                 return GridView.count(
-                  shrinkWrap: true,
                   childAspectRatio: 3,
                   crossAxisCount: 2,
                   children: [
-                    ...state.types.expand((element) => [
+                    ...state.result.expand((element) => [
                       Container(
                           margin: const EdgeInsets.all(4),
                           child: ElevatedButton(
@@ -94,13 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               }
 
-              return Center(
-                child: TextButton(
-                  child: const Text('Empty'),
-                  onPressed: () =>
-                      BlocProvider.of<PokedexCubit>(context).getPokemonTypes(),
-                ),
-              );
+              return PokedexEmpty(() => BlocProvider.of<PokemonTypeCubit>(context).getPokemonTypes());
             },
           ),
         ),
