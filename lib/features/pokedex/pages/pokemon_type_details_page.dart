@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pokedex_flutter/features/pokedex/bloc/pokemon_details_cubit.dart';
 import 'package:pokedex_flutter/features/pokedex/bloc/pokemon_type_details_cubit.dart';
 import 'package:pokedex_flutter/features/pokedex/components/pokemon_type_card.dart';
+import 'package:pokedex_flutter/features/pokedex/repositories/pokemon_details_repository.dart';
 import 'package:pokedex_flutter/features/pokedex/repositories/pokemon_type_details_repository.dart';
 import 'package:pokedex_flutter/features/pokemon_type_cache.dart';
 import 'package:provider/provider.dart';
@@ -27,8 +29,11 @@ class PokemonTypeDetailsPageState extends State<PokemonTypeDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<PokemonTypeDetailsCubit>(
-      create: (context) => PokemonTypeDetailsCubit(PokemonTypeDetailsRepository()),
+    return MultiProvider(
+      providers: [
+        Provider<PokemonTypeDetailsCubit>(create: (context) => PokemonTypeDetailsCubit(PokemonTypeDetailsRepository())),
+        Provider<PokemonDetailsCubit>(create: (context) => PokemonDetailsCubit(PokemonDetailsRepository()))
+      ],
       child: Scaffold(
         appBar: AppBar(),
         body: Consumer<PokemonTypeCache>(
@@ -45,50 +50,63 @@ class PokemonTypeDetailsPageState extends State<PokemonTypeDetailsPage> {
                   }
 
                   if (state is SuccessState) {
-                    return ListView(
-                      children: [
-                        ...state.result.pokemons.expand((pokemon) => [
-                          Card(
+                    return ListView.builder(
+                      itemBuilder: (context, position) {
+
+                        final currentPokemon = state.result.pokemons[position];
+                        Provider.of<PokemonDetailsCubit>(context).getPokemonDetails(currentPokemon.id);
+
+                        return Card(
                             color: pokemonTypeEnumFrom(state.result.id).backgroundColor,
                             child: Container(
-                              margin: const EdgeInsets.all(4),
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        pokemon.id.toString(),
-                                        style: const TextStyle(color: Colors.white),
-                                      ),
-                                      Text(
-                                        pokemon.name,
-                                        style: const TextStyle(color: Colors.white),
-                                      )
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      PokemonTypeCard(state.result.id)
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      SvgPicture.asset(
-                                        pokemonTypeEnumFrom(state.result.id).icon,
-                                        width: 30,
-                                        color: Colors.white,
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              )
+                                margin: const EdgeInsets.all(4),
+                                child: BlocBuilder<PokemonDetailsCubit, PokedexState>(
+                                  builder: (context, pokemonDetailsState) {
+
+                                    return Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(16),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                currentPokemon.id.toString(),
+                                                style: const TextStyle(color: Colors.white),
+                                              ),
+                                              Text(
+                                                currentPokemon.name,
+                                                style: const TextStyle(color: Colors.white),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        if (pokemonDetailsState is SuccessState)
+                                          Column(
+                                            children: [
+                                              for (final type in pokemonDetailsState.result[currentPokemon.id]?.types ?? List.empty())
+                                                PokemonTypeCard(type.id)
+                                            ],
+                                          ),
+                                        if (pokemonDetailsState is SuccessState)
+                                          Column(
+                                            children: [
+                                              if (pokemonDetailsState.result[currentPokemon.id]?.sprite != null)
+                                                Image.network(
+                                                  pokemonDetailsState.result[currentPokemon.id]?.sprite,
+                                                  width: 75
+                                              ) else
+                                                Container(width: 75),
+                                            ],
+                                          )
+                                      ],
+                                    );
+                                  },
+                                )
                             )
-                          ),
-                        ])
-                      ],
+                        );
+                      },
                     );
                   }
 

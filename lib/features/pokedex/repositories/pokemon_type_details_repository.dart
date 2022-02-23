@@ -14,7 +14,6 @@ class PokemonTypeDetailsRepository {
 
   Future<PokemonTypeDetails> getPokemonTypeDetails(int id) async {
     final response = await dio.get('type/$id');
-    print(response);
     final typeDetailsResponse = PokemonTypeDetails.fromJson(response.data);
     return typeDetailsResponse;
   }
