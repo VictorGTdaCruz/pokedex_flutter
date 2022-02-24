@@ -28,7 +28,7 @@ class _PokemonTypesPageState extends State<PokemonTypesPage> {
   @override
   Widget build(BuildContext context) {
     return Provider<PokemonTypeCubit>(
-      create: (context) => PokemonTypeCubit(PokemonTypeRepository()),
+      create: (context) => PokemonTypeCubit(PokemonTypeRepository())..getPokemonTypes(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title),

@@ -15,7 +15,7 @@ class PokemonTypeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith(
-              (states) => pokemonTypeEnumFrom(pokemonTypeId).backgroundColor
+              (states) => pokemonTypeEnumFrom(pokemonTypeId).color
       )),
       // style: ElevatedButton.styleFrom(primary: pokemonTypeEnumFrom(pokemonTypeId).backgroundColor),
       onPressed: () => onPressed?.call(),

@@ -9,7 +9,7 @@ class PokedexEmpty extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: TextButton(
-        child: const Text('Empty'),
+        child: const Text('Empty', style: TextStyle(fontSize: 50),),
         onPressed: () => onRetry.call(),
       )
     );

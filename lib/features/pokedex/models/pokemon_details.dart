@@ -21,7 +21,8 @@ class PokemonDetails {
         return PokemonTypeWithSlot(type['slot'], id, type['type']['name']);
       }).toList();
       final stats = json['stats'].map<PokemonStat>((stat) => PokemonStat(stat['stat']['name'], stat['base_stat'])).toList();
-      final sprite = json['sprites']['other']?['official-artwork']?['front_default'] ?? '';
+      final sprite = json['sprites']['other']?['official-artwork']?['front_default'] ??
+          json['sprites']['front_default'];
       return PokemonDetails(json['id'], json['name'], json['height'], json['weight'], types, stats, sprite);
     } catch (ex) {
       throw Exception(ex);
