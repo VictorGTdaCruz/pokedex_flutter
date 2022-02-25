@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pokedex_flutter/features/pokedex/bloc/pokemon_details_cubit.dart';
 import 'package:pokedex_flutter/features/pokedex/bloc/pokemon_type_details_cubit.dart';
 import 'package:pokedex_flutter/features/pokedex/components/pokemon_type_card.dart';
+import 'package:pokedex_flutter/features/pokedex/utils/pokedex_formatter.dart';
 import 'package:pokedex_flutter/features/pokedex/repositories/pokemon_details_repository.dart';
 import 'package:pokedex_flutter/features/pokedex/repositories/pokemon_type_details_repository.dart';
 import 'package:pokedex_flutter/features/pokemon_type_cache.dart';
@@ -127,7 +128,7 @@ class _PokemonItemState extends State<PokemonItem> {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 36),
                               child: Text(
-                                '${formatId(widget.currentPokemon.id)}\n${formatName(widget.currentPokemon.name)}',
+                                '${widget.currentPokemon.id.formatId()}\n${widget.currentPokemon.name.formatName()}',
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
@@ -197,24 +198,6 @@ class _PokemonItemState extends State<PokemonItem> {
         ),
       ),
     );
-  }
-
-  String formatId(int id) {
-    switch (id.toString().length) {
-      case 1:
-        return '#00$id';
-      case 2:
-        return '#0$id';
-      default:
-        return '#$id';
-    }
-  }
-
-  String formatName(String name) {
-    return name
-        .split('-')
-        .map((word) => '${word[0].toUpperCase()}${word.substring(1)}')
-        .join(' ');
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pokedex_flutter/features/pokedex/utils/pokedex_formatter.dart';
 
 import '../pokemon_type_enum.dart';
 
@@ -29,7 +30,7 @@ class PokemonTypeCard extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Text(
-            pokemonTypeEnumFrom(pokemonTypeId).name,
+            pokemonTypeEnumFrom(pokemonTypeId).name.formatName(),
             style: TextStyle(fontSize: fontSize.toDouble()),
           ),
         ],
