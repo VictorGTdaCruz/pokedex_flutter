@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pokedex_flutter/features/pokedex/bloc/pokemon_details_cubit.dart';
 import 'package:pokedex_flutter/features/pokedex/bloc/pokemon_type_details_cubit.dart';
 import 'package:pokedex_flutter/features/pokedex/components/pokemon_type_card.dart';
-import 'package:pokedex_flutter/features/pokedex/utils/pokedex_formatter.dart';
 import 'package:pokedex_flutter/features/pokedex/repositories/pokemon_details_repository.dart';
 import 'package:pokedex_flutter/features/pokedex/repositories/pokemon_type_details_repository.dart';
+import 'package:pokedex_flutter/features/pokedex/utils/pokedex_formatter.dart';
 import 'package:pokedex_flutter/features/pokemon_type_cache.dart';
 import 'package:provider/provider.dart';
 
@@ -13,13 +13,12 @@ import '../../../arch/podekex_cubit.dart';
 import '../../ui/widgets/pokedex_empty.dart';
 import '../../ui/widgets/pokedex_error.dart';
 import '../../ui/widgets/pokedex_loading.dart';
+import '../models/pokemon_details.dart';
 import '../models/pokemon_type_details.dart';
 import '../pokemon_type_enum.dart';
 
 class PokemonTypeDetailsPage extends StatefulWidget {
-  const PokemonTypeDetailsPage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const PokemonTypeDetailsPage({Key? key}) : super(key: key);
 
   @override
   State<PokemonTypeDetailsPage> createState() => PokemonTypeDetailsPageState();
@@ -29,44 +28,44 @@ class PokemonTypeDetailsPageState extends State<PokemonTypeDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<PokemonTypeDetailsCubit>(create: (context) => PokemonTypeDetailsCubit(PokemonTypeDetailsRepository())),
-        Provider<PokemonDetailsCubit>(create: (context) => PokemonDetailsCubit(PokemonDetailsRepository()))
-      ],
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Consumer<PokemonTypeCache>(
-            builder: (context, cache, _) {
-              BlocProvider.of<PokemonTypeDetailsCubit>(context).getPokemonTypeDetails(cache.pokemonType?.id ?? 0);
-              return BlocBuilder<PokemonTypeDetailsCubit, PokedexState>(
-                builder: (context, state) {
-                  if (state is LoadingState) {
-                    return const PokedexLoading();
-                  }
+    return Consumer<PokemonTypeCache>(
+      builder: (context, cache, _) {
+        return MultiProvider(
+          providers: [
+            Provider(create: (context) => PokemonTypeDetailsCubit(PokemonTypeDetailsRepository())
+              ..getPokemonTypeDetails(cache.pokemonType?.id ?? 0)),
+            Provider(create: (context) => PokemonDetailsCubit(PokemonDetailsRepository()))
+          ],
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('${cache.pokemonType?.name.formatName()} pokémons!')
+            ),
+            body: BlocBuilder<PokemonTypeDetailsCubit, PokedexState>(
+              builder: (context, state) {
+                if (state is LoadingState) {
+                  return const PokedexLoading();
+                }
 
-                  if (state is ErrorState) {
-                    return PokedexError(() =>
-                        BlocProvider.of<PokemonTypeDetailsCubit>(context)
-                            .getPokemonTypeDetails(cache.pokemonType?.id ?? 0));
-                  }
+                if (state is SuccessState<PokemonTypeDetails>) {
+                  return PokemonListWidget(state.result.pokemons, state.result.id);
+                }
 
-                  if (state is SuccessState) {
-                    return PokemonListWidget(state.result.pokemons, state.result.id);
-                  }
+                if (state is ErrorState) {
+                  return PokedexError(() =>
+                      BlocProvider.of<PokemonTypeDetailsCubit>(context)
+                          .getPokemonTypeDetails(cache.pokemonType?.id ?? 0));
+                }
 
-                  return PokedexEmpty(() =>
-                  BlocProvider.of<PokemonTypeDetailsCubit>(context)
-                      .getPokemonTypeDetails(cache.pokemonType?.id ?? 0));
-                },
-              );
-            }
-        ),
-      ),
+                return PokedexEmpty(() =>
+                    BlocProvider.of<PokemonTypeDetailsCubit>(context)
+                        .getPokemonTypeDetails(cache.pokemonType?.id ?? 0));
+              },
+            )
+          )
+        );
+      }
     );
   }
-
-
 }
 
 class PokemonListWidget extends StatelessWidget {
@@ -82,31 +81,31 @@ class PokemonListWidget extends StatelessWidget {
       itemBuilder: (context, position) {
         final currentPokemon = pokemonList[position];
         Provider.of<PokemonDetailsCubit>(context).getPokemonDetails(currentPokemon.id);
-        return PokemonItem(currentPokemon, pokemonTypeEnumFrom(typeId).backgroundColor);
+        return PokemonListItemWidget(currentPokemon, pokemonTypeEnumFrom(typeId).backgroundColor);
       },
     );
   }
 }
 
-class PokemonItem extends StatefulWidget {
+class PokemonListItemWidget extends StatefulWidget {
   Pokemon currentPokemon;
   Color pokemonTypeBackgroundColor;
 
-  PokemonItem(this.currentPokemon, this.pokemonTypeBackgroundColor);
+  PokemonListItemWidget(this.currentPokemon, this.pokemonTypeBackgroundColor);
 
   @override
-  State<PokemonItem> createState() => _PokemonItemState();
+  State<PokemonListItemWidget> createState() => _PokemonListItemWidgetState();
 }
 
-class _PokemonItemState extends State<PokemonItem> {
-  bool isOpen = false;
+class _PokemonListItemWidgetState extends State<PokemonListItemWidget> {
+  bool isOpened = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          isOpen = !isOpen;
+          isOpened = !isOpened;
         });
       },
       child: Padding(
@@ -132,22 +131,22 @@ class _PokemonItemState extends State<PokemonItem> {
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
-                            if (state is SuccessState && state.result[widget.currentPokemon.id]?.types != null)
+                            if (state is SuccessState<Map<int, PokemonDetails>> && state.result[widget.currentPokemon.id]?.types != null)
                               Column(
                                 children: [
-                                  ...state.result[widget.currentPokemon.id]?.types?.map((type) {
+                                  ...?state.result[widget.currentPokemon.id]?.types.map((type) {
                                     return PokemonTypeCard(type.id);
                                   })
                                 ],
                               ),
-                            if (state is SuccessState && state.result[widget.currentPokemon.id]?.sprite != null)
+                            if (state is SuccessState<Map<int, PokemonDetails>> && state.result[widget.currentPokemon.id]?.sprite != null)
                               Image.network(
-                                  state.result[widget.currentPokemon.id]?.sprite,
+                                  state.result[widget.currentPokemon.id]?.sprite ?? '',
                                   height: 75
                               ),
                           ],
                         ),
-                        if (isOpen && state is SuccessState && state.result[widget.currentPokemon.id]?.stats != null)
+                        if (isOpened && state is SuccessState<Map<int, PokemonDetails>> && state.result[widget.currentPokemon.id]?.stats != null)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -158,7 +157,7 @@ class _PokemonItemState extends State<PokemonItem> {
                                       style: TextStyle(color: Colors.white)
                                   ),
                                   Text(
-                                      state.result[widget.currentPokemon.id].height.toString() + ' m',
+                                      state.result[widget.currentPokemon.id]?.height.formatHeight() ?? '',
                                       style: const TextStyle(color: Colors.white)
                                   ),
                                   const SizedBox(height: 20),
@@ -167,7 +166,7 @@ class _PokemonItemState extends State<PokemonItem> {
                                       style: TextStyle(color: Colors.white)
                                   ),
                                   Text(
-                                      state.result[widget.currentPokemon.id].weight.toString() + ' kg',
+                                      state.result[widget.currentPokemon.id]?.weight.formatWeight() ?? '',
                                       style: const TextStyle(color: Colors.white)
                                   ),
                                 ],
@@ -179,7 +178,7 @@ class _PokemonItemState extends State<PokemonItem> {
                                       style: TextStyle(color: Colors.white)
                                   ),
                                   const SizedBox(height: 10),
-                                  ...state.result[widget.currentPokemon.id]?.stats?.map((stat) {
+                                  ...?state.result[widget.currentPokemon.id]?.stats.map((stat) {
                                     return Text(
                                         '${stat.name}: ${stat.baseStat.toString()}',
                                         style: const TextStyle(color: Colors.white)

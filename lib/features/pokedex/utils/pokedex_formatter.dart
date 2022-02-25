@@ -23,12 +23,14 @@ extension IntExtension on int {
         return '#$this';
     }
   }
+
+  String formatHeight() => '$this m';
+
+  String formatWeight() => '$this kg';
 }
 
 extension StringExtension on String {
-  String formatName() {
-    return split('-')
+  String formatName() => split('-')
         .map((word) => '${word[0].toUpperCase()}${word.substring(1)}')
         .join(' ');
-  }
 }

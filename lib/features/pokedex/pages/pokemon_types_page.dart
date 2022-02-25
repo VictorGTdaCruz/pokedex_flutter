@@ -11,13 +11,10 @@ import '../../ui/widgets/pokedex_loading.dart';
 import '../bloc/pokemon_type_cubit.dart';
 import '../components/pokemon_type_card.dart';
 import '../models/pokemon_type.dart';
-import '../pokemon_type_enum.dart';
 import '../repositories/pokemon_type_repository.dart';
 
 class PokemonTypesPage extends StatefulWidget {
-  const PokemonTypesPage(this.title, {Key? key}) : super (key: key);
-
-  final String title;
+  const PokemonTypesPage({Key? key}) : super (key: key);
 
   @override
   State<PokemonTypesPage> createState() => _PokemonTypesPageState();
@@ -27,11 +24,11 @@ class _PokemonTypesPageState extends State<PokemonTypesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<PokemonTypeCubit>(
-      create: (context) => PokemonTypeCubit(PokemonTypeRepository())..getPokemonTypes(),
+    return Provider(
+      create: (_) => PokemonTypeCubit(PokemonTypeRepository())..getPokemonTypes(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: const Text('Choose your type!'),
         ),
         body: BlocBuilder<PokemonTypeCubit, PokedexState>(
           builder: (context, state) {
@@ -39,36 +36,31 @@ class _PokemonTypesPageState extends State<PokemonTypesPage> {
               return const PokedexLoading();
             }
 
-            if (state is ErrorState) {
-              return PokedexError(() => BlocProvider.of<PokemonTypeCubit>(context).getPokemonTypes());
-            }
-
-            if (state is SuccessState) {
+            if (state is SuccessState<List<PokemonType>>) {
               return GridView.count(
                 childAspectRatio: 3,
                 crossAxisCount: 2,
                 children: [
                   ...state.result.expand((type) => [
-                    Container(
-                        margin: const EdgeInsets.all(4),
+                    Padding(
+                        padding: const EdgeInsets.all(4),
                         child: PokemonTypeCard(
                           type.id,
                           onPressed: () {
-                            final pokemonType = PokemonType(
-                                type.id, pokemonTypeEnumFrom(type.id).name);
-                            Provider
-                                .of<PokemonTypeCache>(context, listen: false)
-                                .pokemonType = pokemonType;
+                            Provider.of<PokemonTypeCache>(context, listen: false).pokemonType = type;
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (_) =>
-                                const PokemonTypeDetailsPage(title: ''))
-                            );
+                                builder: (_) => const PokemonTypeDetailsPage()
+                            ));
                           }
                         )
                     )
                   ])
                 ],
               );
+            }
+
+            if (state is ErrorState) {
+              return PokedexError(() => BlocProvider.of<PokemonTypeCubit>(context).getPokemonTypes());
             }
 
             return PokedexEmpty(() => BlocProvider.of<PokemonTypeCubit>(context).getPokemonTypes());

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-abstract class PokedexCubit extends Cubit<PokedexState> {
+abstract class PokedexCubit<T> extends Cubit<PokedexState> {
 
   PokedexCubit(): super(EmptyState());
 
@@ -8,7 +8,7 @@ abstract class PokedexCubit extends Cubit<PokedexState> {
     try {
       emit(LoadingState());
       final result = await code.call();
-      emit(SuccessState(result));
+      emit(SuccessState<T>(result));
     } on Exception catch(exception) {
       emit(ErrorState(exception));
     }

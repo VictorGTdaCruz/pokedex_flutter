@@ -15,10 +15,8 @@ class PokemonDetailsCubit extends PokedexCubit {
         emit(LoadingState());
         final result = await repository.getPokemonDetails(id);
         detailsMap[result.id] = result;
-        emit(SuccessState(detailsMap));
-        print('SUCCESS= ' + result.toString());
+        emit(SuccessState<Map<int, PokemonDetails>>(detailsMap));
       } on Exception catch (exception) {
-        print(exception);
         emit(ErrorState(exception));
       }
     }

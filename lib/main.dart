@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex_flutter/features/pokedex/pages/pokemon_types_page.dart';
-import 'package:pokedex_flutter/features/pokemon_type_cache.dart';
 import 'package:provider/provider.dart';
+
+import 'features/pokemon_type_cache.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,15 +13,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<PokemonTypeCache>(
+    return Provider(
       create: (_) => PokemonTypeCache(),
       child: MaterialApp(
-        title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const PokemonTypesPage('Flutter Demo Home Page'),
-      )
+        home: const PokemonTypesPage(),
+      ),
     );
   }
 }
