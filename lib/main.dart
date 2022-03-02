@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex_flutter/arch/api.dart';
 import 'package:pokedex_flutter/features/pokedex/pages/pokemon_types_page.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    api = Api.configure('https://pokeapi.co/api/v2/');
     return Provider(
       create: (_) => PokemonTypeCache(),
       child: MaterialApp(
