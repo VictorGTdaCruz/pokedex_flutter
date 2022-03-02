@@ -74,7 +74,7 @@ class PokemonListWidget extends StatelessWidget {
   final List<Pokemon> pokemonList;
   final int typeId;
 
-  PokemonListWidget(this.pokemonList, this.typeId);
+  const PokemonListWidget(this.pokemonList, this.typeId, {Key? key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +90,10 @@ class PokemonListWidget extends StatelessWidget {
 }
 
 class PokemonListItemWidget extends StatefulWidget {
-  Pokemon currentPokemon;
-  Color pokemonTypeBackgroundColor;
+  final Pokemon currentPokemon;
+  final Color pokemonTypeBackgroundColor;
 
-  PokemonListItemWidget(this.currentPokemon, this.pokemonTypeBackgroundColor);
+  const PokemonListItemWidget(this.currentPokemon, this.pokemonTypeBackgroundColor, {Key? key}) : super(key: key);
 
   @override
   State<PokemonListItemWidget> createState() => _PokemonListItemWidgetState();

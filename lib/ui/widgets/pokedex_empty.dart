@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PokedexEmpty extends StatelessWidget {
-  const PokedexEmpty({ this.pokemonTypeName });
+  const PokedexEmpty({ this.pokemonTypeName, Key? key }): super (key: key);
 
   final String? pokemonTypeName;
 
