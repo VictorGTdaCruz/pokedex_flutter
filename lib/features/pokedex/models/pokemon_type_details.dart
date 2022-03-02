@@ -11,15 +11,9 @@ class PokemonTypeDetails {
   String toString() => '{name: $name, id: $id}';
 
   factory PokemonTypeDetails.fromJson(Map<String, dynamic> json) {
-    try {
-      final test = json['pokemon'];
-      final pokemons = test.map<Pokemon>((element) {
-        return Pokemon.fromJson(element);
-      }).toList();
-      return PokemonTypeDetails(json['id'], json['name'], pokemons);
-    } catch (ex) {
-      throw Exception(ex);
-    }
+    final test = json['pokemon'];
+    final pokemons = test.map<Pokemon>((element) => Pokemon.fromJson(element)).toList();
+    return PokemonTypeDetails(json['id'], json['name'], pokemons);
   }
 }
 
@@ -30,12 +24,8 @@ class Pokemon {
   final String name;
 
   factory Pokemon.fromJson(Map<String, dynamic> json) {
-    try {
-      final pokemon = json['pokemon'];
-      final url = pokemon['url'];
-      return Pokemon(PokedexFormatter.getIdFromPokemonUrl(url), pokemon['name']);
-    } on Exception catch (exception) {
-      rethrow;
-    }
+    final pokemon = json['pokemon'];
+    final url = pokemon['url'];
+    return Pokemon(PokedexFormatter.getIdFromPokemonUrl(url), pokemon['name']);
   }
 }

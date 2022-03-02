@@ -10,14 +10,10 @@ class PokemonType {
   String toString() => '{name: $id, id: $name}';
 
   static List<PokemonType> fromJson(Map<String, dynamic> json) {
-    try {
-      final pokemonTypeResponse = json['results'];
-      return pokemonTypeResponse.map<PokemonType>((element) {
-          final url = element['url'].toString();
-          return PokemonType(PokedexFormatter.getIdFromTypeUrl(url), element['name'].toString());
-      }).toList();
-    } catch (ex) {
-      throw Exception(ex);
-    }
+    final pokemonTypeResponse = json['results'];
+    return pokemonTypeResponse.map<PokemonType>((element) {
+        final url = element['url'].toString();
+        return PokemonType(PokedexFormatter.getIdFromTypeUrl(url), element['name'].toString());
+    }).toList();
   }
 }

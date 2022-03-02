@@ -10,9 +10,9 @@ import 'package:pokedex_flutter/features/pokemon_type_cache.dart';
 import 'package:provider/provider.dart';
 
 import '../../../arch/podekex_cubit.dart';
-import '../../ui/widgets/pokedex_empty.dart';
-import '../../ui/widgets/pokedex_error.dart';
-import '../../ui/widgets/pokedex_loading.dart';
+import '../../../ui/widgets/pokedex_empty.dart';
+import '../../../ui/widgets/pokedex_error.dart';
+import '../../../ui/widgets/pokedex_loading.dart';
 import '../models/pokemon_details.dart';
 import '../models/pokemon_type_details.dart';
 import '../pokemon_type_enum.dart';
@@ -47,7 +47,11 @@ class PokemonTypeDetailsPageState extends State<PokemonTypeDetailsPage> {
                 }
 
                 if (state is SuccessState<PokemonTypeDetails>) {
-                  return PokemonListWidget(state.result.pokemons, state.result.id);
+                  if(state.result.pokemons.isEmpty) {
+                    return PokedexEmpty(pokemonTypeName: cache.pokemonType?.name ?? '');
+                  } else {
+                    return PokemonListWidget(state.result.pokemons, state.result.id);
+                  }
                 }
 
                 if (state is ErrorState) {
@@ -56,9 +60,7 @@ class PokemonTypeDetailsPageState extends State<PokemonTypeDetailsPage> {
                           .getPokemonTypeDetails(cache.pokemonType?.id ?? 0));
                 }
 
-                return PokedexEmpty(() =>
-                    BlocProvider.of<PokemonTypeDetailsCubit>(context)
-                        .getPokemonTypeDetails(cache.pokemonType?.id ?? 0));
+                return PokedexEmpty(pokemonTypeName: cache.pokemonType?.name ?? '');
               },
             )
           )

@@ -4,10 +4,10 @@ import 'package:pokedex_flutter/features/pokedex/pages/pokemon_type_details_page
 import 'package:provider/provider.dart';
 
 import '../../../arch/podekex_cubit.dart';
+import '../../../ui/widgets/pokedex_empty.dart';
+import '../../../ui/widgets/pokedex_error.dart';
+import '../../../ui/widgets/pokedex_loading.dart';
 import '../../pokemon_type_cache.dart';
-import '../../ui/widgets/pokedex_empty.dart';
-import '../../ui/widgets/pokedex_error.dart';
-import '../../ui/widgets/pokedex_loading.dart';
 import '../bloc/pokemon_type_cubit.dart';
 import '../components/pokemon_type_card.dart';
 import '../models/pokemon_type.dart';
@@ -63,7 +63,7 @@ class _PokemonTypesPageState extends State<PokemonTypesPage> {
               return PokedexError(() => BlocProvider.of<PokemonTypeCubit>(context).getPokemonTypes());
             }
 
-            return PokedexEmpty(() => BlocProvider.of<PokemonTypeCubit>(context).getPokemonTypes());
+            return const PokedexEmpty();
           },
         ),
       ),

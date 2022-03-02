@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import '../ui/design_system/pokedex_colors.dart';
+import '../../ui/design_system/pokedex_colors.dart';
 
 enum PokemonTypeEnum {
   normal,
