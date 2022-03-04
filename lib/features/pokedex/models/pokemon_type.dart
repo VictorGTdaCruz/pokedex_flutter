@@ -5,7 +5,7 @@ class PokemonType extends Equatable {
   final int id;
   final String name;
 
-  PokemonType(this.id, this.name);
+  const PokemonType(this.id, this.name);
 
   @override
   String toString() => '{id: $id, name: $name}';

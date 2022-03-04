@@ -30,14 +30,14 @@ void main() {
     blocTest<PokemonTypeCubit, PokedexState>(
         'WHEN manageStatesDuring is called THEN should emit loading and success',
         build: () {
-          when(repo.getPokemonTypes()).thenAnswer((_) => Future.value([PokemonType(0, 'water')]));
+          when(repo.getPokemonTypes()).thenAnswer((_) => Future.value([const PokemonType(0, 'water')]));
           return PokemonTypeCubit(repo);
         },
         act: (cubit) => cubit.getPokemonTypes(),
         expect: () =>
         [
           LoadingState(),
-          SuccessState<List<PokemonType>>([PokemonType(0, 'water')])
+          SuccessState<List<PokemonType>>([const PokemonType(0, 'water')])
         ]
     );
 

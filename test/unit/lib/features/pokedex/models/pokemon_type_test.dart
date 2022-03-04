@@ -12,26 +12,26 @@ void main() {
 
     final pokemonTypes = PokemonType.fromJson(decoded);
     final expectedTypes = [
-      PokemonType(1, 'normal'),
-      PokemonType(2, 'fighting'),
-      PokemonType(3, 'flying'),
-      PokemonType(4, 'poison'),
-      PokemonType(5, 'ground'),
-      PokemonType(6, 'rock'),
-      PokemonType(7, 'bug'),
-      PokemonType(8, 'ghost'),
-      PokemonType(9, 'steel'),
-      PokemonType(10, 'fire'),
-      PokemonType(11, 'water'),
-      PokemonType(12, 'grass'),
-      PokemonType(13, 'electric'),
-      PokemonType(14, 'psychic'),
-      PokemonType(15, 'ice'),
-      PokemonType(16, 'dragon'),
-      PokemonType(17, 'dark'),
-      PokemonType(18, 'fairy'),
-      PokemonType(10001, 'unknown'),
-      PokemonType(10002, 'shadow')
+      const PokemonType(1, 'normal'),
+      const PokemonType(2, 'fighting'),
+      const PokemonType(3, 'flying'),
+      const PokemonType(4, 'poison'),
+      const PokemonType(5, 'ground'),
+      const PokemonType(6, 'rock'),
+      const PokemonType(7, 'bug'),
+      const PokemonType(8, 'ghost'),
+      const PokemonType(9, 'steel'),
+      const PokemonType(10, 'fire'),
+      const PokemonType(11, 'water'),
+      const PokemonType(12, 'grass'),
+      const PokemonType(13, 'electric'),
+      const PokemonType(14, 'psychic'),
+      const PokemonType(15, 'ice'),
+      const PokemonType(16, 'dragon'),
+      const PokemonType(17, 'dark'),
+      const PokemonType(18, 'fairy'),
+      const PokemonType(10001, 'unknown'),
+      const PokemonType(10002, 'shadow')
     ];
 
     expect(pokemonTypes, expectedTypes);
