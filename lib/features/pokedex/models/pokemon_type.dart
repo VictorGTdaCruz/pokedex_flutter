@@ -1,13 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:pokedex_flutter/features/pokedex/utils/pokedex_formatter.dart';
 
-class PokemonType {
+class PokemonType extends Equatable {
   final int id;
   final String name;
 
   PokemonType(this.id, this.name);
 
   @override
-  String toString() => '{name: $id, id: $name}';
+  String toString() => '{id: $id, name: $name}';
 
   static List<PokemonType> fromJson(Map<String, dynamic> json) {
     final pokemonTypeResponse = json['results'];
@@ -16,4 +17,7 @@ class PokemonType {
         return PokemonType(PokedexFormatter.getIdFromTypeUrl(url), element['name'].toString());
     }).toList();
   }
+
+  @override
+  List<Object?> get props => [id, name];
 }
