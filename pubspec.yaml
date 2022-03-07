@@ -14,6 +14,7 @@ dependencies:
   equatable: ^2.0.3
   provider: ^6.0.1
   flutter_svg: ^0.22.0
+  pretty_dio_logger: ^1.1.1
 
   cupertino_icons: ^1.0.2
 

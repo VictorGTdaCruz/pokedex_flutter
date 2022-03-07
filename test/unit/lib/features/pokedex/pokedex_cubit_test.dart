@@ -1,9 +1,4 @@
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:pokedex_flutter/arch/podekex_cubit.dart';
-import 'package:pokedex_flutter/features/pokedex/bloc/pokemon_type_cubit.dart';
-import 'package:pokedex_flutter/features/pokedex/models/pokemon_type.dart';
 import 'package:pokedex_flutter/features/pokedex/repositories/pokemon_type_repository.dart';
 
 import '../../../../mocks/generator.mocks.dart';
@@ -17,7 +12,7 @@ void main() {
   });
 
   group('PokedexCubit tests', () {
-    blocTest<PokemonTypeCubit, PokedexState>(
+    blocTest<PokemonTypeCubit, PokedexViewState>(
         'WHEN cubit is created THEN should start at empty state',
         build: () {
           return PokemonTypeCubit(repo);
@@ -26,8 +21,8 @@ void main() {
           expect(cubit.state, EmptyState());
         }
     );
-
-    blocTest<PokemonTypeCubit, PokedexState>(
+    //
+    blocTest<PokemonTypeCubit, PokedexViewState>(
         'WHEN manageStatesDuring is called THEN should emit loading and success',
         build: () {
           when(repo.getPokemonTypes()).thenAnswer((_) => Future.value([const PokemonType(0, 'water')]));
@@ -40,8 +35,8 @@ void main() {
           SuccessState<List<PokemonType>>([const PokemonType(0, 'water')])
         ]
     );
-
-    blocTest<PokemonTypeCubit, PokedexState>(
+    //
+    blocTest<PokemonTypeCubit, PokedexViewState>(
         'WHEN manageStatesDuring is called with exception THEN should emit error',
         build: () {
           when(repo.getPokemonTypes()).thenAnswer((_) => Future.error(Exception()));
